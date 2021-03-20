@@ -32,22 +32,17 @@ vc = GroupCall(app, input_filename="input.raw", play_on_repeat=True)
 arq = ARQ(ARQ_API)
 
 
-@app.on_message(filters.command("start") & filters.chat(sudo_chat_id))
+@app.on_message(filters.command("start", prefixes='.') & filters.chat(sudo_chat_id))
 async def start(_, message):
     await send(START_TEXT)
 
 
-@app.on_message(filters.command("help") & filters.chat(sudo_chat_id))
+@app.on_message(filters.command("help", prefixes='.') & filters.chat(sudo_chat_id))
 async def help(_, message):
     await send(HELP_TEXT)
 
 
-@app.on_message(filters.command("repo") & filters.chat(sudo_chat_id))
-async def repo(_, message):
-    await send(REPO_TEXT)
-
-
-@app.on_message(filters.command("joinvc") & filters.user(owner_id))
+@app.on_message(filters.command("joinvc", prefixes='.') & filters.user(owner_id))
 async def joinvc(_, message):
     global chat_joined
     try:
@@ -63,7 +58,7 @@ async def joinvc(_, message):
         await send(str(e))
 
 
-@app.on_message(filters.command("leavevc") & filters.user(owner_id))
+@app.on_message(filters.command("leavevc", prefixes='.') & filters.user(owner_id))
 async def leavevc(_, message):
     global chat_joined
     if not chat_joined:
@@ -73,13 +68,13 @@ async def leavevc(_, message):
     m = await send("__**Left The Voice Chat.**__")
 
 
-@app.on_message(filters.command("kill") & filters.user(owner_id))
+@app.on_message(filters.command("kill", prefixes='.') & filters.user(owner_id))
 async def killbot(_, message):
     await send("__**Killed!__**")
     quit()
 
 
-@app.on_message(filters.command("play") & filters.chat(sudo_chat_id))
+@app.on_message(filters.command("play", prefixes='.') & filters.chat(sudo_chat_id))
 async def queuer(_, message):
     usage = "**Usage:**\n__**/play youtube/saavn/deezer Song_Name**__"
     if len(message.command) < 3:
@@ -104,7 +99,7 @@ async def queuer(_, message):
     await play()
 
 
-@app.on_message(filters.command("skip") & filters.chat(sudo_chat_id) & ~filters.edited)
+@app.on_message(filters.command("skip", prefixes='.') & filters.chat(sudo_chat_id) & ~filters.edited)
 async def skip(_, message):
     global playing
     if len(queue) == 0:
@@ -115,7 +110,7 @@ async def skip(_, message):
     await play()
 
 
-@app.on_message(filters.command("queue") & filters.chat(sudo_chat_id))
+@app.on_message(filters.command("queue", prefixes='.') & filters.chat(sudo_chat_id))
 async def queue_list(_, message):
     if len(queue) != 0:
         i = 1
@@ -290,7 +285,7 @@ async def ytplay(requested_by, query):
 
 
 @app.on_message(
-    filters.command("telegram") & filters.chat(sudo_chat_id) & ~filters.edited
+    filters.command("telegram", prefixes='.') & filters.chat(sudo_chat_id) & ~filters.edited
 )
 async def tgplay(_, message):
     global playing
@@ -325,7 +320,7 @@ async def send(text):
     return m
 
 
-print("\nBot Starting...\nFor Support Join https://t.me/PatheticProgrammers\n")
+print("\nBot Starting...")
 
 
 app.run()
